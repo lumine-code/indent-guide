@@ -100,7 +100,7 @@ describe("indent-guide", () => {
       // The component measures asynchronously; keep updating until guides land.
       await waitUntil(() => {
         mainModule.updateGuide(editor, editorElement);
-        return editorElement.querySelector(".indent-guide-layer indent-guide");
+        return editorElement.querySelector(".indent-guide-layer .indent-guide");
       });
     }
 
@@ -126,7 +126,7 @@ describe("indent-guide", () => {
 
       const layer = editorElement.querySelector(".indent-guide-layer");
       expect(layer).not.toBeNull();
-      expect(layer.querySelectorAll("indent-guide.indent-guide").length).toBeGreaterThan(0);
+      expect(layer.querySelectorAll(".indent-guide").length).toBeGreaterThan(0);
     });
 
     it("renders guides above selections", async () => {
@@ -142,7 +142,7 @@ describe("indent-guide", () => {
       const highlights = editorElement.querySelector(".scroll-view .lines > .highlights");
       const selection = highlights.querySelector(".selection .region");
       const layer = editorElement.querySelector(".indent-guide-layer");
-      const guide = editorElement.querySelector(".indent-guide-layer indent-guide");
+      const guide = editorElement.querySelector(".indent-guide-layer .indent-guide");
       expect(selection).not.toBeNull();
       expect(layer.parentElement).toBe(highlights);
       expect(getComputedStyle(guide).zIndex).toBe("1");
@@ -163,7 +163,7 @@ describe("indent-guide", () => {
 
       await waitUntil(() => {
         mainModule.updateGuide(editor, editorElement);
-        return item.isConnected && editorElement.querySelector(".indent-guide-layer indent-guide");
+        return item.isConnected && editorElement.querySelector(".indent-guide-layer .indent-guide");
       });
 
       const highlights = editorElement.querySelector(".scroll-view .lines > .highlights");
