@@ -17,7 +17,7 @@ To install `indent-guide` search for _indent-guide_ in the Install pane of the L
 
 ## Commands
 
-Commands available in `atom-workspace`:
+Commands available in `lumine-workspace`:
 
 - `indent-guide:toggle-cursor-aware-active`: switch between cursor-column and deepest-guide highlighting.
 
@@ -26,7 +26,7 @@ Commands available in `atom-workspace`:
 Guides are rendered as `indent-guide` elements layered over the editor. Bundled syntax themes set their base, stack, and active colors through package-specific custom properties, with neutral package fallbacks for other themes. Adjust them in your `styles.css`:
 
 ```css
-atom-text-editor {
+lumine-text-editor {
   --indent-guide-color: rgba(158, 158, 158, 0.15);
   --indent-guide-stack-color: rgba(158, 158, 158, 0.3);
   --indent-guide-active-color: var(--text-color-info);

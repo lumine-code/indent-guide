@@ -105,23 +105,23 @@ describe("indent-guide", () => {
     }
 
     beforeEach(async () => {
-      workspaceElement = atom.views.getView(atom.workspace);
+      workspaceElement = lumine.views.getView(lumine.workspace);
       jasmine.attachToDOM(workspaceElement);
-      const pack = await atom.packages.activatePackage("indent-guide");
+      const pack = await lumine.packages.activatePackage("indent-guide");
       mainModule = pack.mainModule;
     });
 
     it("registers the toggle command", () => {
-      const commands = atom.commands
+      const commands = lumine.commands
         .findCommands({ target: workspaceElement })
         .map((command) => command.name);
       expect(commands).toContain("indent-guide:toggle-cursor-aware-active");
     });
 
     it("renders guide elements for an indented buffer", async () => {
-      const editor = await atom.workspace.open();
+      const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n    c\n  d\ne\n");
-      const editorElement = atom.views.getView(editor);
+      const editorElement = lumine.views.getView(editor);
       await renderGuides(editor, editorElement);
 
       const layer = editorElement.querySelector(".indent-guide-layer");
@@ -130,13 +130,13 @@ describe("indent-guide", () => {
     });
 
     it("renders guides above selections", async () => {
-      const editor = await atom.workspace.open();
+      const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
       editor.setSelectedBufferRange([
         [0, 0],
         [1, 3],
       ]);
-      const editorElement = atom.views.getView(editor);
+      const editorElement = lumine.views.getView(editor);
       await renderGuides(editor, editorElement);
 
       const highlights = editorElement.querySelector(".scroll-view .lines > .highlights");
@@ -149,7 +149,7 @@ describe("indent-guide", () => {
     });
 
     it("keeps block decorations above guides", async () => {
-      const editor = await atom.workspace.open();
+      const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
       const marker = editor.markBufferPosition([0, Infinity]);
       const item = document.createElement("div");
@@ -159,7 +159,7 @@ describe("indent-guide", () => {
         item,
         position: "after",
       });
-      const editorElement = atom.views.getView(editor);
+      const editorElement = lumine.views.getView(editor);
 
       await waitUntil(() => {
         mainModule.updateGuide(editor, editorElement);
@@ -175,12 +175,12 @@ describe("indent-guide", () => {
     });
 
     it("removes guide layers on deactivation", async () => {
-      const editor = await atom.workspace.open();
+      const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
-      const editorElement = atom.views.getView(editor);
+      const editorElement = lumine.views.getView(editor);
       await renderGuides(editor, editorElement);
 
-      await atom.packages.deactivatePackage("indent-guide");
+      await lumine.packages.deactivatePackage("indent-guide");
       expect(editorElement.querySelector(".indent-guide-layer")).toBeNull();
       expect(editorElement.querySelector(".indent-guide")).toBeNull();
     });
