@@ -174,6 +174,31 @@ describe("indent-guide", () => {
       );
     });
 
+    it("extends guides across the rendered overscan, not just the visible rows", async () => {
+      const editor = await lumine.workspace.open();
+      editor.setText("a\n" + "  b\n".repeat(200) + "c\n");
+      const editorElement = lumine.views.getView(editor);
+      editorElement.style.height = "120px";
+      const component = editorElement.component;
+      component.didResize();
+      await renderGuides(editor, editorElement);
+
+      // With a short viewport over a long buffer the mounted tiles must reach
+      // past the visible rows; smooth scrolling reveals those rows without a
+      // full update, so the guides have to be there already.
+      await waitUntil(() => {
+        mainModule.updateGuide(editor, editorElement);
+        return component.getLastVisibleRow() + 1 < component.getRenderedEndRow();
+      });
+
+      const guide = editorElement.querySelector(".indent-guide-layer .indent-guide");
+      const guideBottom = parseFloat(guide.style.top) + parseFloat(guide.style.height);
+      const visibleBottom = component.pixelPositionBeforeBlocksForRow(
+        component.getLastVisibleRow() + 1,
+      );
+      expect(guideBottom).toBeGreaterThan(visibleBottom);
+    });
+
     it("removes guide layers on deactivation", async () => {
       const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
