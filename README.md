@@ -13,7 +13,7 @@ Guides are drawn as continuous vertical lines across each indentation level, inc
 
 ## Installation
 
-To install `indent-guide` search for _indent-guide_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/indent-guide`.
+To install `indent-guide` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/indent-guide`.
 
 ## Commands
 
