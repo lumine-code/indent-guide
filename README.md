@@ -29,7 +29,7 @@ Guides are rendered as `indent-guide` elements layered over the editor. Bundled 
 lumine-text-editor {
   --indent-guide-color: rgba(158, 158, 158, 0.15);
   --indent-guide-stack-color: rgba(158, 158, 158, 0.3);
-  --indent-guide-active-color: var(--text-color-info);
+  --indent-guide-active-color: var(--accent-color);
 }
 ```
 
