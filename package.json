@@ -24,9 +24,6 @@
   "engines": {
     "lumine": "^1.0.0"
   },
-  "backgroundTips": [
-    "The indentation guides enclosing the cursor are highlighted, so you always see which block you are in."
-  ],
   "scripts": {
     "test": "lumine --test spec",
     "lint": "eslint . --max-warnings 0",
@@ -39,6 +36,13 @@
       "description": "When enabled, the active guide is determined by the cursor column position. When disabled, the deepest guide on the cursor line is always marked active.",
       "type": "boolean",
       "default": true
+    }
+  },
+  "providedServices": {
+    "background-tips.provider": {
+      "versions": {
+        "1.0.0": "provideBackgroundTips"
+      }
     }
   },
   "devDependencies": {
