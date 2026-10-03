@@ -67,6 +67,39 @@ describe("indent-guide", () => {
     it("returns no guides for flat text", () => {
       expect(computeGuides([0, 0, 0])).toEqual([]);
     });
+
+    for (const [location, visibleFrom, visibleTo, lastRow, cursorRow] of [
+      ["end", 200000, 200010, 200020, 200005],
+      ["start", 0, 10, 200000, 5],
+    ]) {
+      it(`bounds temporary row storage near the ${location} of a large buffer`, () => {
+        const getIndent = jasmine.createSpy("getIndent").and.returnValue(1);
+        const originalPush = Array.prototype.push;
+        let appendedItems = 0;
+        let guides;
+        // Count temporary array entries synchronously, without timing or heap
+        // thresholds. The invisible rows should never be expanded into an array.
+        Array.prototype.push = function (...items) {
+          appendedItems += items.length;
+          return originalPush.apply(this, items);
+        };
+        try {
+          guides = getGuides(
+            visibleFrom,
+            visibleTo,
+            lastRow,
+            [{ row: cursorRow, level: 0 }],
+            getIndent,
+          );
+        } finally {
+          Array.prototype.push = originalPush;
+        }
+
+        expect(appendedItems).toBeLessThan(100);
+        expect(getIndent.calls.count()).toBeLessThan(20);
+        expect(guides).toEqual(getGuides(0, 10, 20, [{ row: 5, level: 0 }], () => 1));
+      });
+    }
   });
 
   describe("toGuides", () => {
