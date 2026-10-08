@@ -68,6 +68,32 @@ describe("indent-guide", () => {
       expect(computeGuides([0, 0, 0])).toEqual([]);
     });
 
+    for (const [firstRow, secondRow] of [
+      [2, 10],
+      [20, 100],
+    ]) {
+      for (const direction of ["above", "below"]) {
+        it(`keeps both cursor guides ${direction} the viewport at rows ${firstRow} and ${secondRow}`, () => {
+          const visibleFrom = direction === "above" ? secondRow + 2 : firstRow - 2;
+          const guides = getGuides(
+            visibleFrom,
+            visibleFrom + 1,
+            secondRow + 5,
+            [
+              { row: firstRow, level: 0 },
+              { row: secondRow, level: 1 },
+            ],
+            () => 2,
+          );
+
+          expect(guides.filter((guide) => guide.active).map((guide) => guide.point.column)).toEqual(
+            [0, 1],
+          );
+          expect(guides.every((guide) => guide.stack)).toBe(true);
+        });
+      }
+    }
+
     for (const [location, visibleFrom, visibleTo, lastRow, cursorRow] of [
       ["end", 200000, 200010, 200020, 200005],
       ["start", 0, 10, 200000, 5],
