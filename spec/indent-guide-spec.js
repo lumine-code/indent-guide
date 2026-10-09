@@ -263,13 +263,13 @@ describe("indent-guide", () => {
       editor.setText("a\n  b\n");
       const editorElement = lumine.views.getView(editor);
       const component = editorElement.component;
-      await waitUntil(() => component.updateSyncAfterMeasuringContent_);
+      await lumine.packages.deactivatePackage("indent-guide");
 
       // The after-measure phase is scheduled through the view registry and can
       // flush after the editor is destroyed, once editor.component is null.
       // Stand in for the core method so the spec exercises only the wrapper.
-      const original = jasmine.createSpy("updateSyncAfterMeasuringContent_");
-      component.updateSyncAfterMeasuringContent_ = original;
+      const original = spyOn(component, "updateSyncAfterMeasuringContent");
+      mainModule = (await lumine.packages.activatePackage("indent-guide")).mainModule;
       spyOn(mainModule, "updateGuide");
       editor.destroy();
       expect(editor.component).toBeNull();
