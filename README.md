@@ -11,6 +11,8 @@ Guides are drawn as continuous vertical lines across each indentation level, inc
 - **Cursor awareness**: the active guide can follow the cursor column or stick to the deepest guide on the line.
 - **Fold aware**: guides collapse together with folded regions.
 
+![Follow nested blocks with indentation guides.](.github/demo.png)
+
 ## Installation
 
 To install `indent-guide` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/indent-guide`.

@@ -1,0 +1,16 @@
+{
+  "title": "indent-guide",
+  "description": "Follow nested blocks with indentation guides.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "ee03b3c902ee7882a58312fabeee638baf37733b",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Follow nested blocks with indentation guides.",
+      "width": 1200,
+      "height": 760
+    }
+  ]
+}
