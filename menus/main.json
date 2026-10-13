@@ -8,7 +8,9 @@
           "submenu": [
             {
               "label": "Cursor-Aware Indent Guides",
-              "command": "indent-guide:toggle-cursor-aware-active"
+              "command": "indent-guide:toggle-cursor-aware-active",
+              "group": "editing",
+              "order": 40
             }
           ]
         }
