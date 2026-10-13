@@ -1,0 +1,32 @@
+{
+  "menu": [
+    {
+      "label": "View",
+      "submenu": [
+        {
+          "label": "Editor",
+          "submenu": [
+            {
+              "label": "Cursor-Aware Indent Guides",
+              "command": "indent-guide:toggle-cursor-aware-active"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Indent Guide",
+          "submenu": [
+            {
+              "label": "Toggle Cursor-Aware Guides",
+              "command": "indent-guide:toggle-cursor-aware-active"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
