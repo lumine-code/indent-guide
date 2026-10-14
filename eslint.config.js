@@ -62,5 +62,9 @@ module.exports = [
     },
   },
   // Must be last: turns off any lint rules that would conflict with Prettier.
+  {
+    files: ["demo/**/*.js"],
+    languageOptions: { sourceType: "module" },
+  },
   prettier,
 ];
