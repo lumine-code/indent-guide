@@ -1,6 +1,11 @@
 const { getGuides, toGuides, uniq } = require("../lib/guides");
 
 describe("indent-guide", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   describe("guide computation", () => {
     function indentFnFor(indents) {
       return (row) => (row < indents.length ? indents[row] : null);

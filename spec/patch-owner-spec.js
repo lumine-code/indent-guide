@@ -1,4 +1,9 @@
 describe("Indent Guide captured measurement patch ownership", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   let main, editor, component, original, extras;
   beforeEach(async () => {
     jasmine.useRealClock();
