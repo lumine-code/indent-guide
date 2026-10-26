@@ -23,6 +23,10 @@ Commands available in `lumine-workspace`:
 
 - `indent-guide:toggle-cursor-aware-active`: switch between cursor-column and deepest-guide highlighting.
 
+## Usage
+
+Only guide rows and indentation levels intersecting the viewport are rendered, with gaps for inline block content. Deep indentation, folds and scrolling beyond browser CSS size limits therefore keep a bounded DOM. Source indentation is read in chunks; unusually long blank runs are resolved cooperatively and cancelled when the document, cursor or viewport changes.
+
 ## Customization
 
 Guides are rendered as `indent-guide` elements layered over the editor. Bundled syntax themes set their base, stack, and active colors through package-specific custom properties, with neutral package fallbacks for other themes. Adjust them in your `styles.css`:

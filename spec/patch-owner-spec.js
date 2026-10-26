@@ -11,6 +11,7 @@ describe("Indent Guide captured measurement patch ownership", () => {
       spyOn(lumine.shell, method).and.resolveTo();
     spyOn(lumine.application, "openWindow").and.resolveTo();
     jasmine.attachToDOM(lumine.workspace.getElement());
+    lumine.workspace.getElement().style.height = "600px";
     editor = await lumine.workspace.open();
     editor.setText("a\n  b\n    c\nz\n");
     component = editor.component;

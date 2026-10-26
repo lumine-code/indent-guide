@@ -11,6 +11,7 @@ describe("Indent guides at visual tab stops", () => {
       spyOn(lumine.shell, method).and.resolveTo();
     spyOn(lumine.application, "openWindow").and.resolveTo();
     jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
+    lumine.workspace.getElement().style.height = "600px";
     lumine.config.set("indent-guide.cursorAwareActive", true);
     main = (await lumine.packages.activatePackage("indent-guide")).mainModule;
   });

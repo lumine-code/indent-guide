@@ -169,7 +169,9 @@ describe("indent-guide", () => {
     }
 
     beforeEach(async () => {
+      jasmine.useRealClock();
       workspaceElement = lumine.views.getView(lumine.workspace);
+      workspaceElement.style.height = "600px";
       jasmine.attachToDOM(workspaceElement);
       const pack = await lumine.packages.activatePackage("indent-guide");
       mainModule = pack.mainModule;
@@ -208,16 +210,17 @@ describe("indent-guide", () => {
       const layer = editorElement.querySelector(".indent-guide-layer");
       const guide = editorElement.querySelector(".indent-guide-layer .indent-guide");
       expect(selection).not.toBeNull();
-      expect(layer.parentElement).toBe(highlights);
+      expect(layer.parentElement).toBe(editorElement.querySelector(".scroll-view"));
       expect(getComputedStyle(guide).zIndex).toBe("1");
     });
 
-    it("keeps block decorations above guides", async () => {
+    it("keeps guide segments out of block decorations", async () => {
       const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
       const marker = editor.markBufferPosition([0, Infinity]);
       const item = document.createElement("div");
       item.className = "inline-result";
+      item.style.height = "80px";
       editor.decorateMarker(marker, {
         type: "block",
         item,
@@ -230,15 +233,16 @@ describe("indent-guide", () => {
         return item.isConnected && editorElement.querySelector(".indent-guide-layer .indent-guide");
       });
 
-      const highlights = editorElement.querySelector(".scroll-view .lines > .highlights");
       const layer = editorElement.querySelector(".indent-guide-layer");
-      expect(layer.parentElement).toBe(highlights);
-      expect(highlights.compareDocumentPosition(item) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(
-        0,
-      );
+      expect(layer.parentElement).toBe(editorElement.querySelector(".scroll-view"));
+      const block = item.getBoundingClientRect();
+      for (const node of layer.querySelectorAll(".indent-guide")) {
+        const bounds = node.getBoundingClientRect();
+        expect(bounds.bottom <= block.top + 0.5 || bounds.top >= block.bottom - 0.5).toBeTrue();
+      }
     });
 
-    it("extends guides across the rendered overscan, not just the visible rows", async () => {
+    it("clips viewport guides and updates them as scrolling reveals other rows", async () => {
       const editor = await lumine.workspace.open();
       editor.setText("a\n" + "  b\n".repeat(200) + "c\n");
       const editorElement = lumine.views.getView(editor);
@@ -257,10 +261,15 @@ describe("indent-guide", () => {
 
       const guide = editorElement.querySelector(".indent-guide-layer .indent-guide");
       const guideBottom = parseFloat(guide.style.top) + parseFloat(guide.style.height);
-      const visibleBottom = component.pixelPositionBeforeBlocksForRow(
-        component.getLastVisibleRow() + 1,
-      );
-      expect(guideBottom).toBeGreaterThan(visibleBottom);
+      expect(guideBottom).toBeLessThanOrEqual(editorElement.getHeight());
+      editorElement.setScrollTop(48);
+      await waitUntil(() => {
+        mainModule.updateGuide(editor, editorElement);
+        return editorElement.querySelector(".indent-guide")?.style.top === "0px";
+      });
+      expect(
+        parseFloat(editorElement.querySelector(".indent-guide").style.height),
+      ).toBeLessThanOrEqual(editorElement.getHeight());
     });
 
     it("survives an editor update landing after the editor is destroyed", async () => {

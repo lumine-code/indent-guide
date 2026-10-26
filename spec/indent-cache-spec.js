@@ -13,11 +13,13 @@ describe("Indentation cache", () => {
     editor.setText("root\n \t child\n  partial\n\t\n\u00a0\n    child");
     const read = cache.prepare();
     const line = spyOn(editor, "lineTextForBufferRow").and.callThrough();
+    const measured = spyOn(cache, "measure").and.callThrough();
     const expected = [0, 1.25, 0.5, null, null, 1];
     for (let pass = 0; pass < 3; pass++) {
       for (let row = 0; row < expected.length; row++) expect(read(row)).toBe(expected[row]);
     }
-    expect(line.calls.count()).toBe(expected.length);
+    expect(line).not.toHaveBeenCalled();
+    expect(measured.calls.count()).toBe(expected.length);
   });
 
   it("invalidates after edits, row shifts, undo, redo and tab-width changes", () => {
@@ -46,8 +48,10 @@ describe("Indentation cache", () => {
     cache = new IndentCache(editor, 2);
     const read = cache.prepare();
     const line = spyOn(editor, "lineTextForBufferRow").and.callThrough();
+    const measured = spyOn(cache, "measure").and.callThrough();
     for (const row of [0, 256, 512, 512, 0]) expect(read(row)).toBe(0.5);
     expect(cache.pages.size).toBe(2);
-    expect(line.calls.count()).toBe(4);
+    expect(line).not.toHaveBeenCalled();
+    expect(measured.calls.count()).toBe(4);
   });
 });

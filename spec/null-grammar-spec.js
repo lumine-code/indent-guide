@@ -5,6 +5,7 @@ describe("indent-guide with no grammar", () => {
   beforeEach(async () => {
     await lumine.packages.activatePackage("language-text");
     jasmine.attachToDOM(lumine.workspace.getElement());
+    lumine.workspace.getElement().style.height = "600px";
     main = (await lumine.packages.activatePackage(path.join(__dirname, ".."))).mainModule;
     editor = await lumine.workspace.open();
     editor.setText("root\n    child\n        nested\nend");
