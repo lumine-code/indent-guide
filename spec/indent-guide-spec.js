@@ -214,6 +214,30 @@ describe("indent-guide", () => {
       expect(getComputedStyle(guide).zIndex).toBe("1");
     });
 
+    it("renders cached guides without horizontal measurements or recursive rendering", async () => {
+      const editor = await lumine.workspace.open();
+      editor.setText("a\n  b\n    c\n  d\ne\n");
+      const element = lumine.views.getView(editor);
+      await renderGuides(editor, element);
+      spyOn(element, "pixelPositionForScreenPosition").and.throwError("Horizontal measurement");
+      const original = element.pixelPositionAfterBlocksForScreenRow.bind(element);
+      let depth = 0;
+      spyOn(element, "pixelPositionAfterBlocksForScreenRow").and.callFake((...args) => {
+        expect(depth).toBe(0);
+        if (depth) throw new Error("Recursive guide rendering");
+        depth++;
+        try {
+          mainModule.updateGuide(editor, element);
+        } finally {
+          depth--;
+        }
+        return original(...args);
+      });
+      mainModule.updateGuide(editor, element);
+      expect(element.pixelPositionAfterBlocksForScreenRow).toHaveBeenCalled();
+      expect(element.querySelectorAll(".indent-guide").length).toBeGreaterThan(0);
+    });
+
     it("keeps guide segments out of block decorations", async () => {
       const editor = await lumine.workspace.open();
       editor.setText("a\n  b\n");
