@@ -6,7 +6,7 @@
   &.indent-guide-stack {
     background-color: var(--indent-guide-stack-color, rgba(158, 158, 158, 0.24));
     &.indent-guide-active {
-      background-color: var(--indent-guide-active-color, rgba(1, 162, 226, 0.18));
+      background-color: var(--indent-guide-active-color, rgba(1, 162, 226, 0.35));
     }
   }
 }
